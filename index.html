@@ -5,65 +5,61 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Bootik_official — Pro Store</title>
 
-<!--
-  INSTRUCTIONS:
-  1) Paste this file as index.html
-  2) Edit API_BASE below to point to your backend (e.g. http://localhost:4242)
-     If backend exists, it should implement POST /api/create-payment as described earlier.
-  3) If you don't have backend, contact me and I can produce direct-Zarinpal front-end variant.
-  4) For PWA icons, replace the 'data:' icon in manifest generation or add /icon.png to root.
--->
-
+<!-- PWA manifest will be created dynamically -->
 <style>
 :root{
-  --bg:#050507; --card:#0e0e10; --muted:#9aa0a6; --accent:#9b00ff;
+  --bg:#050507; --card:#0e0e10; --muted:#9aa0a6; --accent:#9b00ff; --danger:#ff3860;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter, "Vazirmatn", system-ui, sans-serif;background:linear-gradient(180deg,var(--bg),#070607);color:#fff;-webkit-font-smoothing:antialiased}
-header{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #111;background:rgba(0,0,0,0.15)}
-.brand{font-weight:800;letter-spacing:1px;font-size:20px}
+body{margin:0;font-family:Vazirmatn,Inter,system-ui; background:linear-gradient(180deg,var(--bg),#070607); color:#fff; -webkit-font-smoothing:antialiased}
+header{padding:16px 18px;border-bottom:1px solid #111;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:800;letter-spacing:1px}
 .controls{display:flex;gap:8px;align-items:center}
 .btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
 .btn.ghost{background:transparent;border:1px solid #222;color:var(--muted)}
-.container{max-width:1200px;margin:28px auto;padding:0 18px}
+.container{max-width:1200px;margin:26px auto;padding:0 16px}
 
-/* slider */
-.slider{position:relative;height:320px;border-radius:14px;overflow:hidden;margin-bottom:26px}
-.slider .slides{display:flex;height:100%;width:500%;animation:slide 16s infinite}
-.slider .slides img{width:100%;height:100%;object-fit:cover;display:block}
-@keyframes slide{
-  0%{transform:translateX(0)}20%{transform:translateX(0)}25%{transform:translateX(-100%)}45%{transform:translateX(-100%)}50%{transform:translateX(-200%)}70%{transform:translateX(-200%)}75%{transform:translateX(-300%)}95%{transform:translateX(-300)}100%{transform:translateX(-400%)}
-}
+/* hero / slider */
+.hero{height:300px;border-radius:12px;overflow:hidden;position:relative;margin-bottom:20px}
+.slides{display:flex;height:100%;width:500%;animation:slide 16s infinite}
+.slides img{width:100%;height:100%;object-fit:cover;filter:contrast(.9) saturate(.8)}
+@keyframes slide{0%{transform:translateX(0)}20%{transform:translateX(0)}25%{transform:translateX(-100%)}45%{transform:translateX(-100%)}50%{transform:translateX(-200%)}70%{transform:translateX(-200%)}75%{transform:translateX(-300%)}95%{transform:translateX(-300%)}100%{transform:translateX(-400%)}}
 
-/* grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
-.card{background:var(--card);padding:14px;border-radius:12px;border:1px solid #151515;transition:transform .18s,box-shadow .18s;display:flex;flex-direction:column}
-.card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(0,0,0,0.6)}
-.card img{width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:10px}
-.card h3{margin:6px 0;font-size:17px}
-.card p.desc{flex:1;color:var(--muted);font-size:13px;margin:0 0 8px}
+/* layout */
+.toolbar{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.search{flex:1;display:flex;gap:8px}
+.search input{flex:1;padding:8px 10px;border-radius:8px;border:1px solid #222;background:#0b0b0b;color:#fff}
+.select{padding:8px;border-radius:8px;border:1px solid #222;background:#0b0b0b;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:var(--card);padding:12px;border-radius:12px;border:1px solid #121212;transition:transform .18s,box-shadow .18s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.6)}
+.card img{width:100%;height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px}
+.card h3{margin:6px 0;font-size:16px}
+.card p.desc{color:var(--muted);font-size:13px;margin:0 0 8px;flex:1}
 
-/* product modal */
-.modal {position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.8));z-index:1000;padding:20px}
-.modal .panel{width:960px;max-width:96%;background:#0c0c0c;border-radius:12px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.modal img{width:100%;height:420px;object-fit:cover;border-radius:10px}
-.modal .meta h2{margin:0 0 8px}
-.modal .meta p{color:var(--muted)}
+/* modal product */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);z-index:999;padding:18px}
+.modal .panel{width:980px;max-width:96%;background:#0c0c0c;border-radius:12px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.product-gallery img{width:100%;height:420px;object-fit:cover;border-radius:10px}
+.thumb-row{display:flex;gap:8px;margin-top:8px}
+.thumb-row img{width:64px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer;opacity:.9}
 
 /* cart drawer */
-.cart-drawer{position:fixed;right:18px;bottom:18px;width:360px;background:#0b0b0b;border-radius:12px;padding:12px;border:1px solid #121212;box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:1200}
+.cart-drawer{position:fixed;right:18px;bottom:18px;width:380px;background:#0b0b0b;border-radius:12px;padding:12px;border:1px solid #121212;z-index:1200;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
 .cart-drawer h4{margin:0 0 8px}
 .cart-item{display:flex;gap:8px;align-items:center;border-bottom:1px solid #151515;padding:8px 0}
 .cart-item img{width:56px;height:56px;object-fit:cover;border-radius:8px}
 .qty{display:flex;gap:6px;align-items:center}
 .small-btn{background:#1b1b1b;border:1px solid #222;padding:6px;border-radius:6px;color:var(--muted);cursor:pointer}
-
-/* totals */
 .totals{margin-top:12px;border-top:1px dashed #222;padding-top:10px;color:var(--muted)}
 .totals .line{display:flex;justify-content:space-between;margin-bottom:8px}
 
+/* admin modal */
+.admin-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);z-index:1400;padding:20px}
+.admin-panel{width:960px;max-width:96%;background:#0e0e10;border-radius:12px;padding:16px}
+
 /* responsive */
-@media(max-width:880px){ .modal .panel{grid-template-columns:1fr} .cart-drawer{width:92%;left:4%;right:4%} .card img{height:160px} }
+@media(max-width:880px){ .modal .panel{grid-template-columns:1fr} .cart-drawer{width:92%;left:4%;right:4%} .card img{height:140px} }
 </style>
 </head>
 <body>
@@ -71,65 +67,81 @@ header{padding:18px 20px;display:flex;align-items:center;justify-content:space-b
 <header>
   <div class="brand">Bootik_official</div>
   <div class="controls">
-    <button class="btn ghost" onclick="openAdmin()">پنل ادمین</button>
+    <button class="btn ghost" onclick="openAdminPrompt()">پنل ادمین</button>
     <button class="btn" onclick="toggleCart()">سبد (<span id="cartCount">0</span>)</button>
   </div>
 </header>
 
 <main class="container">
-  <!-- slider -->
-  <div class="slider" aria-hidden="true">
+  <div class="hero" aria-hidden="true">
     <div class="slides">
-      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Bootik+Dark+Drop+1" alt="">
-      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Bootik+New+Masks" alt="">
-      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Streetwear+2025" alt="">
-      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Exclusive+Drop" alt="">
-      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Bootik+official" alt="">
+      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Bootik+Dark+Drop+1">
+      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=New+Masks+2025">
+      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Street+Collection">
+      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Exclusive+Drop">
+      <img src="https://via.placeholder.com/1600x600/0b0b0b/ffffff?text=Bootik+official">
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search">
+      <input id="searchInput" placeholder="جستجو در محصولات..." oninput="applyFilters()">
+      <select id="categoryFilter" class="select" onchange="applyFilters()">
+        <option value="">همه دسته‌ها</option>
+        <option value="ماسک">ماسک</option>
+        <option value="هودی">هودی</option>
+        <option value="تیشرت">تیشرت</option>
+        <option value="اکسسوری">اکسسوری</option>
+      </select>
+      <select id="sortSelect" class="select" onchange="applyFilters()">
+        <option value="new">جدیدترین</option>
+        <option value="price_asc">قیمت: کم → زیاد</option>
+        <option value="price_desc">قیمت: زیاد → کم</option>
+      </select>
+    </div>
+
+    <div style="display:flex;gap:8px">
+      <input id="couponInput" class="select" placeholder="کد تخفیف (اگر داری)">
+      <button class="btn ghost" onclick="applyCoupon()">اعمال کد</button>
     </div>
   </div>
 
   <section>
-    <h2 style="text-align:center;margin-bottom:14px">محصولات ویژه</h2>
+    <h2 style="text-align:center;margin-bottom:12px">محصولات ویژه</h2>
     <div id="productsGrid" class="grid"></div>
   </section>
 </main>
 
-<!-- product modal -->
+<!-- modal product -->
 <div class="modal" id="productModal">
   <div class="panel" role="dialog" aria-modal="true">
-    <div>
+    <div class="product-gallery">
       <img id="modalImg" src="">
-      <div style="display:flex;gap:10px;margin-top:8px">
-        <img id="thumb1" style="width:64px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer">
-        <img id="thumb2" style="width:64px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer">
-        <img id="thumb3" style="width:64px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer">
+      <div class="thumb-row">
+        <img id="thumb1" onclick="changeModalImage(this.src)">
+        <img id="thumb2" onclick="changeModalImage(this.src)">
+        <img id="thumb3" onclick="changeModalImage(this.src)">
       </div>
     </div>
     <div class="meta">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <h2 id="modalTitle"></h2>
-        <div style="color:var(--muted)"><span id="modalSku"></span></div>
+        <div style="color:var(--muted)"><small id="modalSku"></small></div>
       </div>
       <p id="modalDesc" class="desc"></p>
-      <div style="margin-top:14px">
-        <div style="font-size:20px;font-weight:700" id="modalPrice"></div>
-        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+      <div style="margin-top:16px">
+        <div id="modalPrice" style="font-size:20px;font-weight:800"></div>
+        <div style="margin-top:10px;display:flex;gap:10px;align-items:center">
           <div class="qty">
-            <button class="small-btn" onclick="changeQty(-1)">−</button>
-            <div id="modalQty" style="min-width:28px;text-align:center">1</div>
-            <button class="small-btn" onclick="changeQty(1)">＋</button>
+            <button class="small-btn" onclick="changeQtyModal(-1)">−</button>
+            <span id="modalQty" style="min-width:34px;text-align:center;display:inline-block">1</span>
+            <button class="small-btn" onclick="changeQtyModal(1)">＋</button>
           </div>
           <button class="btn" style="flex:1" onclick="modalAddToCart()">افزودن به سبد</button>
         </div>
       </div>
-
-      <div style="margin-top:18px;color:var(--muted);font-size:13px">
-        ارسال سریع — تضمین کیفیت — امکان بازگشت کالا (مشروط)
-      </div>
-
-      <div style="margin-top:12px">
-        <button class="btn ghost" onclick="closeModal()">بستن</button>
-      </div>
+      <div style="margin-top:16px;color:var(--muted);font-size:13px">ارسال ۱-۳ روز کاری — امکان بازگشت در ۷ روز</div>
+      <div style="margin-top:12px"><button class="btn ghost" onclick="closeModal()">بستن</button></div>
     </div>
   </div>
 </div>
@@ -140,118 +152,136 @@ header{padding:18px 20px;display:flex;align-items:center;justify-content:space-b
   <div id="cartItems"></div>
 
   <div class="totals">
-    <div class="line"><div>جمع جزئی</div><div id="subTotal">0</div></div>
-    <div class="line"><div>مالیات (%%)</div><div id="taxAmount">0</div></div>
-    <div class="line"><div>هزینه ارسال</div><div id="shippingAmount">0</div></div>
-    <div class="line" style="font-weight:700"><div>جمع کل</div><div id="grandTotal">0</div></div>
+    <div class="line"><div>جمع جزئی</div><div id="subTotal">0 تومان</div></div>
+    <div class="line"><div>مالیات (<span id="taxPercent">9</span>%)</div><div id="taxAmount">0 تومان</div></div>
+    <div class="line"><div>هزینه ارسال</div><div id="shippingAmount">0 تومان</div></div>
+    <div class="line" style="font-weight:700"><div>جمع کل</div><div id="grandTotal">0 تومان</div></div>
   </div>
 
   <div style="margin-top:12px;display:flex;gap:8px">
     <button class="btn" onclick="checkout()">پرداخت</button>
     <button class="btn ghost" onclick="clearCart()">خالی کردن</button>
   </div>
+
+  <div style="margin-top:10px;color:var(--muted);font-size:12px">پرداخت امن با زرین‌پال</div>
 </div>
 
-<!-- inline script -->
+<!-- admin modal -->
+<div class="admin-modal" id="adminModal">
+  <div class="admin-panel">
+    <h3>پنل مدیریت — Bootik_official</h3>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+      <div style="flex:1;min-width:280px">
+        <h4>افزودن / ویرایش محصول</h4>
+        <input id="prodId" placeholder="id (خالی برای جدید)" style="width:100%;margin-bottom:8px;padding:8px;background:#0b0b0b;border:1px solid #222;color:#fff;border-radius:8px">
+        <input id="prodName" placeholder="نام محصول" style="width:100%;margin-bottom:8px;padding:8px;background:#0b0b0b;border:1px solid #222;color:#fff;border-radius:8px">
+        <textarea id="prodDesc" placeholder="توضیحات" style="width:100%;margin-bottom:8px;padding:8px;background:#0b0b0b;border:1px solid #222;color:#fff;border-radius:8px"></textarea>
+        <input id="prodPrice" placeholder="قیمت (تومان)" style="width:100%;margin-bottom:8px;padding:8px;background:#0b0b0b;border:1px solid #222;color:#fff;border-radius:8px">
+        <input id="prodImages" placeholder="آدرس تصاویر (, جدا شده)" style="width:100%;margin-bottom:8px;padding:8px;background:#0b0b0b;border:1px solid #222;color:#fff;border-radius:8px">
+        <input id="prodCategory" placeholder="دسته‌بندی (مثال: ماسک)" style="width:100%;margin-bottom:8px;padding:8px;background:#0b0b0b;border:1px solid #222;color:#fff;border-radius:8px">
+        <div style="display:flex;gap:8px">
+          <button class="btn" onclick="saveProduct()">ذخیره</button>
+          <button class="btn ghost" onclick="closeAdmin()">بستن</button>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:320px">
+        <h4>محصولات موجود</h4>
+        <div id="adminProducts" style="max-height:360px;overflow:auto;border:1px solid #151515;padding:8px;border-radius:8px"></div>
+        <h4 style="margin-top:12px">سفارش‌ها</h4>
+        <div id="adminOrders" style="max-height:200px;overflow:auto;border:1px solid #151515;padding:8px;border-radius:8px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- logo SVG hidden for download -->
+<div id="logoSvg" style="display:none">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400">
+  <rect width="1200" height="400" fill="#000"/>
+  <text x="50%" y="55%" font-size="84" font-family="Vazirmatn,Arial" fill="#9b00ff" font-weight="700" text-anchor="middle">BOOTIK</text>
+  <text x="50%" y="82%" font-size="28" font-family="Vazirmatn,Arial" fill="#bbb" text-anchor="middle">_official</text>
+</svg>
+</div>
+
 <script>
 /* ================== CONFIG ================== */
-/* Set API_BASE to your backend (must implement POST /api/create-payment) */
-const API_BASE = 'http://localhost:4242'; // <--- EDIT THIS for production
-/* Tax and shipping */
-const TAX_PERCENT = 9; // درصد مالیات
+/* IMPORTANT:
+   - If you use backend, set API_BASE to your server (http://localhost:4242 or https://yourdomain)
+   - To enable real payments, run the backend Node server (code provided below) and set Zarinpal MERCHANT in backend .env
+*/
+const API_BASE = 'http://localhost:4242'; // <- edit for production if backend available
+const TAX_PERCENT = 9; // مالیات
 const SHIPPING_FLAT = 12000; // تومان
-/* Currency unit: prices are in Toman here */
-const PRICE_UNIT = 'toman'; // 'toman' or 'rial' — backend uses PRICE_UNIT to convert
-/* PWA icon (data URL) — replace with your own file or path /icon.png */
-const PWA_ICON_DATAURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // optional, can remain */
-
-/* =============== PRODUCTS (10 items, sample) =============== */
-const PRODUCTS = [
-  { id:'p1', sku:'B001', name:'ماسک Phantom', description:'ماسکی با بافت نرم و طراحی گِنگ', price:150000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Phantom+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Phantom+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Phantom+3'
-    ]},
-  { id:'p2', sku:'B002', name:'ماسک Skull Edition', description:'ویرایش اسکال با چاپ محدود', price:190000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Skull+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Skull+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Skull+3'
-    ]},
-  { id:'p3', sku:'B003', name:'ماسک Ninja Ghost', description:'استتار شهری و راحت', price:220000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Ninja+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Ninja+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Ninja+3'
-    ]},
-  { id:'p4', sku:'B004', name:'هودی Dark Shadow', description:'هودی مشکی با دوخت برجسته', price:480000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Hoodie+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Hoodie+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Hoodie+3'
-    ]},
-  { id:'p5', sku:'B005', name:'هودی Street Gang', description:'طرح خیابانی محدود', price:520000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Hoodie2+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Hoodie2+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Hoodie2+3'
-    ]},
-  { id:'p6', sku:'B006', name:'تیشرت BlackNoise', description:'پنبه‌ای و خنک', price:250000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Tshirt1+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Tshirt1+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Tshirt1+3'
-    ]},
-  { id:'p7', sku:'B007', name:'تیشرت HellMode', description:'ادیت محدود و سنگین', price:290000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Tshirt2+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Tshirt2+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Tshirt2+3'
-    ]},
-  { id:'p8', sku:'B008', name:'دستکش Tactical', description:'چرم صنعتی با پنجه تقویت‌شده', price:160000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Gloves+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Gloves+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Gloves+3'
-    ]},
-  { id:'p9', sku:'B009', name:'بَندانا DarkWave', description:'بندانا نازک با چاپ UV', price:120000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Bandana+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Bandana+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Bandana+3'
-    ]},
-  { id:'p10', sku:'B010', name:'کیف SideBag Ghost', description:'کیف کوچک شهری با چند جیب', price:310000, images:[
-      'https://via.placeholder.com/800x800/111/fff?text=Bag+1',
-      'https://via.placeholder.com/800x800/111/fff?text=Bag+2',
-      'https://via.placeholder.com/800x800/111/fff?text=Bag+3'
-    ]}
-];
+const ADMIN_DEFAULT_PASS = 'BootikAdmin2025'; // *** CHANGE THIS in production! ***
+/* coupon examples */
+const COUPONS = { 'BOO20': 20, 'WELCOME10': 10 }; // percentage off
 
 /* =============== state =============== */
-let CART = JSON.parse(localStorage.getItem('bootik_cart_v2') || '[]');
-let modalQty = 1;
-let modalProduct = null;
+let PRODUCTS = []; // loaded from initialProducts below or from backend
+let CART = JSON.parse(localStorage.getItem('bootik_cart_v3') || '[]');
+let ORDERS = JSON.parse(localStorage.getItem('bootik_orders_v3') || '[]'); // local fallback
+let appliedCoupon = null;
 
-/* =============== UI renderers =============== */
+/* =============== initial products (10 samples) =============== */
+const initialProducts = [
+  { id:'p1', sku:'B001', name:'ماسک Phantom', category:'ماسک', description:'ماسکی با بافت نرم و طراحی گِنگ', price:150000, images:['https://via.placeholder.com/800x800/111/fff?text=Phantom+1','https://via.placeholder.com/800x800/111/fff?text=Phantom+2','https://via.placeholder.com/800x800/111/fff?text=Phantom+3'], stock:20 },
+  { id:'p2', sku:'B002', name:'ماسک Skull Edition', category:'ماسک', description:'ویرایش اسکال با چاپ محدود', price:190000, images:['https://via.placeholder.com/800x800/111/fff?text=Skull+1','https://via.placeholder.com/800x800/111/fff?text=Skull+2','https://via.placeholder.com/800x800/111/fff?text=Skull+3'], stock:18 },
+  { id:'p3', sku:'B003', name:'ماسک Ninja Ghost', category:'ماسک', description:'استتار شهری و راحت', price:220000, images:['https://via.placeholder.com/800x800/111/fff?text=Ninja+1','https://via.placeholder.com/800x800/111/fff?text=Ninja+2','https://via.placeholder.com/800x800/111/fff?text=Ninja+3'], stock:25 },
+  { id:'p4', sku:'B004', name:'هودی Dark Shadow', category:'هودی', description:'هودی مشکی با دوخت برجسته', price:480000, images:['https://via.placeholder.com/800x800/111/fff?text=Hoodie+1','https://via.placeholder.com/800x800/111/fff?text=Hoodie+2','https://via.placeholder.com/800x800/111/fff?text=Hoodie+3'], stock:12 },
+  { id:'p5', sku:'B005', name:'هودی Street Gang', category:'هودی', description:'طرح خیابانی محدود', price:520000, images:['https://via.placeholder.com/800x800/111/fff?text=Hoodie2+1','https://via.placeholder.com/800x800/111/fff?text=Hoodie2+2','https://via.placeholder.com/800x800/111/fff?text=Hoodie2+3'], stock:9 },
+  { id:'p6', sku:'B006', name:'تیشرت BlackNoise', category:'تیشرت', description:'پنبه‌ای و خنک', price:250000, images:['https://via.placeholder.com/800x800/111/fff?text=Tshirt1+1','https://via.placeholder.com/800x800/111/fff?text=Tshirt1+2','https://via.placeholder.com/800x800/111/fff?text=Tshirt1+3'], stock:30 },
+  { id:'p7', sku:'B007', name:'تیشرت HellMode', category:'تیشرت', description:'ادیت محدود و سنگین', price:290000, images:['https://via.placeholder.com/800x800/111/fff?text=Tshirt2+1','https://via.placeholder.com/800x800/111/fff?text=Tshirt2+2','https://via.placeholder.com/800x800/111/fff?text=Tshirt2+3'], stock:14 },
+  { id:'p8', sku:'B008', name:'دستکش Tactical', category:'اکسسوری', description:'چرم صنعتی با پنجه تقویت‌شده', price:160000, images:['https://via.placeholder.com/800x800/111/fff?text=Gloves+1','https://via.placeholder.com/800x800/111/fff?text=Gloves+2','https://via.placeholder.com/800x800/111/fff?text=Gloves+3'], stock:40 },
+  { id:'p9', sku:'B009', name:'بَندانا DarkWave', category:'اکسسوری', description:'بندانا نازک با چاپ UV', price:120000, images:['https://via.placeholder.com/800x800/111/fff?text=Bandana+1','https://via.placeholder.com/800x800/111/fff?text=Bandana+2','https://via.placeholder.com/800x800/111/fff?text=Bandana+3'], stock:50 },
+  { id:'p10', sku:'B010', name:'کیف SideBag Ghost', category:'اکسسوری', description:'کیف کوچک شهری با چند جیب', price:310000, images:['https://via.placeholder.com/800x800/111/fff?text=Bag+1','https://via.placeholder.com/800x800/111/fff?text=Bag+2','https://via.placeholder.com/800x800/111/fff?text=Bag+3'], stock:11 }
+];
+
+/* ============= persistence ============== */
+function loadProducts(){
+  const saved = JSON.parse(localStorage.getItem('bootik_products_v3') || 'null');
+  if(saved && Array.isArray(saved) && saved.length>0){ PRODUCTS = saved; }
+  else { PRODUCTS = initialProducts; localStorage.setItem('bootik_products_v3', JSON.stringify(PRODUCTS)); }
+}
+loadProducts();
+
+/* =============== rendering =============== */
 function currency(n){ return Number(n).toLocaleString() + ' تومان'; }
 
-function renderGrid(){
-  const grid = document.getElementById('productsGrid');
-  grid.innerHTML = PRODUCTS.map(p=>`
-    <div class="card" role="article">
-      <img src="${p.images[0]}" alt="${p.name}" />
+function renderProductsGrid(filter={}){
+  const q = (document.getElementById('searchInput').value || '').toLowerCase();
+  const category = document.getElementById('categoryFilter').value;
+  const sort = document.getElementById('sortSelect').value;
+  let filtered = PRODUCTS.filter(p => (!category || p.category===category) && (p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)));
+  if(sort==='price_asc') filtered.sort((a,b)=>a.price-b.price);
+  if(sort==='price_desc') filtered.sort((a,b)=>b.price-a.price);
+  if(sort==='new') filtered = filtered; // default
+
+  const html = filtered.map(p=>`
+    <div class="card">
+      <img src="${p.images[0]}" alt="${p.name}">
       <h3>${p.name}</h3>
       <p class="desc">${p.description}</p>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <div style="flex:1;font-weight:700">${Number(p.price).toLocaleString()} تومان</div>
-        <div><button class="btn" onclick='openModal("${p.id}")'>مشاهده</button></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+        <div style="font-weight:800">${currency(p.price)}</div>
+        <div style="margin-left:auto"><button class="btn" onclick='openModal("${p.id}")'>مشاهده</button></div>
       </div>
     </div>`).join('');
+  document.getElementById('productsGrid').innerHTML = html;
   updateCartCount();
 }
 
-/* modal */
+function applyFilters(){ renderProductsGrid(); }
+
+/* =============== modal ================= */
+let modalQty = 1;
 function openModal(id){
-  const p = PRODUCTS.find(x=>x.id===id);
-  if(!p) return;
-  modalProduct = p;
-  modalQty = 1;
+  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+  modalQty = 1; window.modalProduct = p;
   document.getElementById('modalImg').src = p.images[0];
   document.getElementById('thumb1').src = p.images[0];
-  document.getElementById('thumb2').src = p.images[1];
-  document.getElementById('thumb3').src = p.images[2];
+  document.getElementById('thumb2').src = p.images[1] || p.images[0];
+  document.getElementById('thumb3').src = p.images[2] || p.images[0];
   document.getElementById('modalTitle').innerText = p.name;
   document.getElementById('modalSku').innerText = p.sku;
   document.getElementById('modalDesc').innerText = p.description;
@@ -260,42 +290,30 @@ function openModal(id){
   document.getElementById('productModal').style.display = 'flex';
 }
 function closeModal(){ document.getElementById('productModal').style.display = 'none'; }
-function changeQty(d){
-  modalQty = Math.max(1, modalQty + d); document.getElementById('modalQty').innerText = modalQty;
-}
-function modalAddToCart(){
-  if(!modalProduct) return;
-  addToCart(modalProduct.id, modalQty);
-  closeModal();
-}
+function changeModalImage(src){ document.getElementById('modalImg').src = src; }
+function changeQtyModal(d){ modalQty = Math.max(1, modalQty + d); document.getElementById('modalQty').innerText = modalQty; }
+function modalAddToCart(){ addToCart(window.modalProduct.id, modalQty); closeModal(); }
 
-/* cart operations */
+/* =============== CART ================== */
+function persistCart(){ localStorage.setItem('bootik_cart_v3', JSON.stringify(CART)); renderCart(); updateCartCount(); }
+
 function addToCart(id, qty=1){
-  const prod = PRODUCTS.find(p=>p.id===id);
-  if(!prod) return;
-  const existing = CART.find(i=>i.id===id);
-  if(existing) existing.qty += qty;
-  else CART.push({ id:prod.id, name:prod.name, price:prod.price, image:prod.images[0], qty });
-  persistCart();
-  openCart();
-  toast('به سبد اضافه شد');
+  const prod = PRODUCTS.find(p=>p.id===id); if(!prod) return;
+  const found = CART.find(i=>i.id===id);
+  if(found){ found.qty += qty; } else { CART.push({ id:prod.id, name:prod.name, price:prod.price, image:prod.images[0], qty }); }
+  persistCart(); toast('به سبد اضافه شد');
 }
 function updateQty(id, delta){
-  const it = CART.find(i=>i.id===id); if(!it) return;
-  it.qty = Math.max(1, it.qty + delta);
-  persistCart(); renderCart();
+  const it = CART.find(x=>x.id===id); if(!it) return;
+  it.qty = Math.max(1, it.qty + delta); persistCart();
 }
-function removeItem(id){
-  CART = CART.filter(i=>i.id!==id); persistCart(); renderCart();
-}
-function clearCart(){ CART=[]; persistCart(); renderCart(); }
+function removeItem(id){ CART = CART.filter(x=>x.id!==id); persistCart(); }
+function clearCart(){ CART=[]; persistCart(); toast('سبد خالی شد'); }
 
-function persistCart(){ localStorage.setItem('bootik_cart_v2', JSON.stringify(CART)); renderCart(); updateCartCount(); }
-
-/* render cart */
 function renderCart(){
   const box = document.getElementById('cartItems');
-  if(CART.length===0){ box.innerHTML = '<div style="color:#999">سبد خرید خالی است</div>'; updateTotals(); return; }
+  if(!box) return;
+  if(CART.length===0) { box.innerHTML = '<div style="color:#999">سبد خرید خالی است</div>'; updateTotals(); return; }
   box.innerHTML = CART.map(it=>`
     <div class="cart-item">
       <img src="${it.image}" alt="">
@@ -304,120 +322,163 @@ function renderCart(){
         <div style="color:var(--muted);font-size:13px">${currency(it.price)} × ${it.qty}</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
-        <div style="display:flex;flex-direction:column">
-          <button class="small-btn" onclick='updateQty("${it.id}",1)'>+</button>
-          <button class="small-btn" onclick='updateQty("${it.id}",-1)'>−</button>
-        </div>
-        <button class="small-btn" onclick='removeItem("${it.id}")'>حذف</button>
+        <button class="small-btn" onclick='updateQty("${it.id}",1)'>+</button>
+        <button class="small-btn" onclick='updateQty("${it.id}",-1)'>−</button>
+        <button class="small-btn" onclick='removeItem("${it.id}")' style="margin-top:6px">حذف</button>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
   updateTotals();
-  updateCartCount();
 }
 
-/* totals */
 function updateTotals(){
-  const sub = CART.reduce((s,i)=>s + i.price * i.qty, 0);
+  const sub = CART.reduce((s,i)=>s + i.price*i.qty, 0);
   const tax = Math.round(sub * (TAX_PERCENT/100));
-  const shipping = sub>0 ? SHIPPING_FLAT : 0;
-  const grand = sub + tax + shipping;
-  document.getElementById('subTotal').innerText = Number(sub).toLocaleString() + ' تومان';
-  document.getElementById('taxAmount').innerText = Number(tax).toLocaleString() + ' تومان';
-  document.getElementById('shippingAmount').innerText = Number(shipping).toLocaleString() + ' تومان';
-  document.getElementById('grandTotal').innerText = Number(grand).toLocaleString() + ' تومان';
-  return { sub, tax, shipping, grand };
+  const shipping = sub > 0 ? SHIPPING_FLAT : 0;
+  const couponPercent = appliedCoupon ? appliedCoupon.percent : 0;
+  const discount = Math.round((sub * couponPercent)/100);
+  const grand = sub + tax + shipping - discount;
+  document.getElementById('subTotal').innerText = currency(sub);
+  document.getElementById('taxAmount').innerText = currency(tax);
+  document.getElementById('shippingAmount').innerText = currency(shipping);
+  document.getElementById('grandTotal').innerText = currency(grand);
+  return { sub, tax, shipping, grand, discount };
 }
 
 function updateCartCount(){ document.getElementById('cartCount').innerText = CART.reduce((s,i)=>s+i.qty,0); }
 
-/* cart drawer toggle */
-function toggleCart(){
-  const el = document.getElementById('cartDrawer');
-  el.style.display = (el.style.display === 'none' || el.style.display==='') ? 'block' : 'none';
-  renderCart();
+/* cart drawer */
+function toggleCart(){ const el=document.getElementById('cartDrawer'); el.style.display=(el.style.display==='none'||el.style.display==='')?'block':'none'; renderCart(); }
+function openCart(){ document.getElementById('cartDrawer').style.display='block'; renderCart(); }
+
+/* coupon */
+function applyCoupon(){
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  if(!code) return alert('کد وارد نشده');
+  if(COUPONS[code]){ appliedCoupon = { code, percent: COUPONS[code] }; toast('کد اعمال شد: ' + COUPONS[code] + '%'); updateTotals(); }
+  else alert('کد نامعتبر');
 }
-function openCart(){ document.getElementById('cartDrawer').style.display = 'block'; renderCart(); }
 
 /* toast */
-function toast(msg){
-  const t = document.createElement('div');
-  t.innerText = msg; t.style.position='fixed'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.bottom='22px';
-  t.style.background='#111'; t.style.padding='10px 14px'; t.style.borderRadius='8px'; t.style.border='1px solid #222'; t.style.zIndex=9999;
-  document.body.appendChild(t); setTimeout(()=>t.remove(),2000);
-}
+function toast(msg){ const t=document.createElement('div'); t.innerText=msg; Object.assign(t.style,{position:'fixed',left:'50%',transform:'translateX(-50%)',bottom:'22px',padding:'10px 14px',background:'#111',border:'1px solid #222',borderRadius:'8px',zIndex:9999}); document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
 
-/* ======= CHECKOUT: call backend to create payment ======= */
+/* ============== CHECKOUT ============== */
+/* This will POST { items: [{id,qty}, ...] } to API_BASE + '/api/create-payment'
+   Backend should return { url: 'https://www.zarinpal.com/pg/StartPay/...' , authority: '...' }
+*/
 async function checkout(){
-  if(CART.length === 0) return alert('سبد خرید خالی است');
-  const items = CART.map(i=>({ id:i.id, qty:i.qty }));
+  if(CART.length===0) return alert('سبد خرید خالی است');
+  const { grand } = updateTotals();
+  // Prepare request items and call backend
+  const payload = { items: CART.map(i=>({ id:i.id, qty:i.qty })) };
   try {
     const res = await fetch(API_BASE + '/api/create-payment', {
-      method:'POST', headers:{ 'Content-Type':'application/json' },
-      body: JSON.stringify({ items })
+      method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload)
     });
     const data = await res.json();
-    if(data && data.url){
-      // redirect to payment page (Zarinpal StartPay)
+    if(data && data.url){ 
+      // Save order locally with status pending (backend also saves)
+      const order = { id: 'local_' + Date.now(), items: CART, amount: grand, status:'pending', created_at: new Date().toISOString() };
+      ORDERS.unshift(order); localStorage.setItem('bootik_orders_v3', JSON.stringify(ORDERS));
+      // redirect to payment gateway
       window.location.href = data.url;
     } else {
-      console.error(data);
-      alert('خطا در ساخت پرداخت. پیام سرور را در کنسول چک کن.');
+      console.error('create-payment response', data);
+      alert('خطا در ساخت پرداخت. کنسول را بررسی کن.');
     }
   } catch (err) {
     console.error(err);
-    alert('خطای شبکه یا CORS. اگر بک‌اند محلی است، مطمئن شو که API_BASE صحیح است.');
+    alert('خطا در ارتباط با سرور. آیا API_BASE را تنظیم کرده‌ای؟');
   }
 }
 
-/* admin quick (prompt) - local only, not secure */
-function openAdmin(){
-  const pass = prompt('رمز ادمین را وارد کنید: (demo)');
-  if(pass !== 'demo') return alert('ناموفق');
-  // simple admin: add sample product
-  const name = prompt('نام محصول جدید:');
-  if(!name) return;
-  const price = Number(prompt('قیمت به تومان:','100000')) || 100000;
-  const id = 'u' + Date.now();
-  PRODUCTS.unshift({ id, sku:id, name, description:'اضافه‌شده دستی', price, images:['https://via.placeholder.com/800x800/111/fff?text=New']});
-  renderGrid();
-  toast('محصول جدید اضافه شد (محلی)');
+/* ============== ADMIN (local demo) ============== */
+/* Simple admin prompt-based login. For production, use server-side auth. */
+function openAdminPrompt(){
+  const pass = prompt('رمز ادمین را وارد کنید:');
+  // Default password is ADMIN_DEFAULT_PASS — **change it**
+  if(!pass) return;
+  if(pass === ADMIN_DEFAULT_PASS){
+    openAdmin();
+  } else {
+    alert('رمز اشتباه است');
+  }
 }
 
-/* init */
-renderGrid();
+/* admin UI */
+function openAdmin(){
+  document.getElementById('adminModal').style.display = 'flex';
+  renderAdminProducts();
+  renderAdminOrders();
+}
+function closeAdmin(){ document.getElementById('adminModal').style.display = 'none'; }
+
+/* save product (add or edit) */
+function saveProduct(){
+  const id = document.getElementById('prodId').value.trim();
+  const name = document.getElementById('prodName').value.trim();
+  const desc = document.getElementById('prodDesc').value.trim();
+  const price = Number(document.getElementById('prodPrice').value) || 0;
+  const images = (document.getElementById('prodImages').value || '').split(',').map(s=>s.trim()).filter(Boolean);
+  const category = document.getElementById('prodCategory').value.trim() || 'اکسسوری';
+  if(!name || price<=0) return alert('نام و قیمت را وارد کن');
+  if(id){
+    const idx = PRODUCTS.findIndex(p=>p.id===id);
+    if(idx>=0){ PRODUCTS[idx].name = name; PRODUCTS[idx].description=desc; PRODUCTS[idx].price=price; PRODUCTS[idx].images=images; PRODUCTS[idx].category=category; }
+    else PRODUCTS.unshift({ id, sku:id, name, description:desc, price, images, category, stock:10 });
+  } else {
+    const nid = 'u' + Date.now();
+    PRODUCTS.unshift({ id:nid, sku:nid, name, description:desc, price, images: images.length?images:['https://via.placeholder.com/800x800/111/fff?text=New'], category, stock:10});
+  }
+  localStorage.setItem('bootik_products_v3', JSON.stringify(PRODUCTS));
+  document.getElementById('prodId').value=''; document.getElementById('prodName').value=''; document.getElementById('prodDesc').value=''; document.getElementById('prodPrice').value=''; document.getElementById('prodImages').value=''; document.getElementById('prodCategory').value='';
+  renderProductsGrid(); renderAdminProducts(); toast('ذخیره شد');
+}
+function renderAdminProducts(){
+  const box = document.getElementById('adminProducts');
+  if(!box) return;
+  box.innerHTML = PRODUCTS.map(p=>`<div style="padding:8px;border-bottom:1px solid #222"><div style="display:flex;justify-content:space-between"><div><b>${p.name}</b><div style="color:var(--muted);font-size:13px">${p.sku} — ${p.category}</div></div><div style="display:flex;gap:8px"><button class="btn ghost" onclick='editProduct("${p.id}")'>ویرایش</button><button class="btn" onclick='deleteProduct("${p.id}")'>حذف</button></div></div></div>`).join('');
+}
+function editProduct(id){
+  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+  document.getElementById('prodId').value = p.id;
+  document.getElementById('prodName').value = p.name;
+  document.getElementById('prodDesc').value = p.description;
+  document.getElementById('prodPrice').value = p.price;
+  document.getElementById('prodImages').value = (p.images||[]).join(',');
+  document.getElementById('prodCategory').value = p.category || '';
+}
+function deleteProduct(id){
+  if(!confirm('حذف شود؟')) return;
+  PRODUCTS = PRODUCTS.filter(p=>p.id!==id);
+  localStorage.setItem('bootik_products_v3', JSON.stringify(PRODUCTS));
+  renderProductsGrid(); renderAdminProducts(); toast('حذف شد');
+}
+
+/* admin orders */
+function renderAdminOrders(){
+  const box = document.getElementById('adminOrders');
+  box.innerHTML = ORDERS.length===0 ? '<div style="color:#999">سفارشی موجود نیست</div>' : ORDERS.map(o=>{
+    return `<div style="padding:8px;border-bottom:1px solid #222">
+      <div style="display:flex;justify-content:space-between"><div><b>سفارش ${o.id}</b><div style="color:var(--muted);font-size:12px">${o.created_at}</div></div><div style="font-weight:700">${currency(o.amount)}</div></div>
+      <div style="font-size:13px;color:var(--muted);margin-top:8px">${o.items.map(i=>i.name+' × '+i.qty).join('، ')}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ============== persistence init ============== */
+renderProductsGrid();
 renderCart();
 
-/* ========== PWA: dynamic manifest + service worker (inline) ========== */
+/* ============== service worker + manifest ============== */
 (function registerPWA(){
-  const manifest = {
-    name: "Bootik_official",
-    short_name: "Bootik",
-    start_url: "./",
-    display: "standalone",
-    background_color: "#000000",
-    theme_color: "#9000ff",
-    icons: [
-      { src: "icon.png", sizes: "512x512", type: "image/png" }
-    ]
-  };
-  const mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  const manifest = { name:'Bootik_official', short_name:'Bootik', start_url:'./', display:'standalone', background_color:'#000', theme_color:'#9b00ff', icons:[{src:'icon.png',sizes:'512x512',type:'image/png'}] };
+  const mBlob = new Blob([JSON.stringify(manifest)],{type:'application/json'});
   const mUrl = URL.createObjectURL(mBlob);
-  const link = document.createElement('link'); link.rel='manifest'; link.href=mUrl; document.head.appendChild(link);
-
-  const swCode = `
-  self.addEventListener('install', e => { e.waitUntil(self.skipWaiting()); });
-  self.addEventListener('activate', e => clients.claim());
-  self.addEventListener('fetch', e => {
-    // simple cache-first for assets
-    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-  });
-  `;
-  const swBlob = new Blob([swCode], { type: 'text/javascript' });
+  const link = document.createElement('link'); link.rel='manifest'; link.href = mUrl; document.head.appendChild(link);
+  const swCode = `self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>clients.claim());self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});`;
+  const swBlob = new Blob([swCode],{type:'text/javascript'});
   const swUrl = URL.createObjectURL(swBlob);
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.register(swUrl).then(()=>console.log('SW registered')).catch(()=>console.log('SW failed'));
-  }
+  if('serviceWorker' in navigator){ navigator.serviceWorker.register(swUrl).then(()=>console.log('SW registered')).catch(()=>console.log('SW failed')); }
 })();
 </script>
 
